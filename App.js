@@ -4,9 +4,12 @@ import {colors, height, width} from "./styles/globalStyles";
 import {useCallback, useEffect, useState} from "react";
 import * as Location from 'expo-location';
 
+const WEATHER_API_KEY = '5095753db95c521d926f098c2d501f98';
+
 export default function App() {
   const [city, setCity] = useState('loading....');
-  const [location, setLocation] = useState(null);
+  const [days, setDays] = useState([]);
+  const [site, setSite] = useState({ lat: 0, lon: 0});
   const [ok, setOk] = useState(true);
 
   const getPermissions = useCallback(async () => {
@@ -16,11 +19,36 @@ export default function App() {
     const { coords: { longitude, latitude }} = await Location.getCurrentPositionAsync({ accuracy: 5 });
     const [{ city: currCity }] = await Location.reverseGeocodeAsync({ latitude, longitude }, { useGoogleMaps: false });
     setCity(currCity);
+    setSite({ lat: latitude, lon: longitude });
   }, []);
+
+  const getWeather = useCallback(async() => {
+    try {
+      const data = await fetch(`https://api.openweathermap.org/data/2.5/forecast/daily?lat=${site.lat}&lon=${site.lon}&cnt=${14}&appid=${WEATHER_API_KEY}`, {
+        mode: 'cors',
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'same-origin',
+      });
+      const res = await data.json();
+      console.log(res);
+    } catch(e) {
+      console.log(e);
+    }
+  }, [site]);
 
   useEffect(() => {
     getPermissions();
   }, []);
+
+  useEffect(() => {
+    const { lat, lon } = site;
+    if (lat === 0 || lon === 0) return;
+    getWeather();
+  }, [site]);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
