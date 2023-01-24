@@ -4,12 +4,12 @@ import BottomNavigationLayout from "./components/Navigation/BottomNavigationLayo
 import {colors} from "./styles/globalStyles";
 
 export default function App() {
-  const [tutorial, setTutorial] = useState(0);
+  const [page, currPage] = useState(0);
   return (
     <View style={styles.container}>
       <Text style={styles.title}>테스트 하고 싶은 앱을 {"\n"}선택해주세요.</Text>
       <View style={{ flex: 9, backgroundColor: colors.label }} />
-      <BottomNavigationLayout />
+      <BottomNavigationLayout page={page} />
     </View>
   )
 }
