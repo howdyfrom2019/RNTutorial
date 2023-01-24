@@ -1,16 +1,23 @@
 import { MaterialIcons } from '@expo/vector-icons';
-import {StyleSheet, Text, View} from "react-native";
+import {StyleSheet, Text, TouchableOpacity} from "react-native";
 import {colors} from "../../styles/globalStyles";
 
-const Icon = ({ iconName, label, focus }) => {
+const Icon = ({ data, focus, callback }) => {
+  const { iconName, label, id } = data;
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <TouchableOpacity
+      style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+      onPress={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        callback && callback(id);
+      }}>
       <MaterialIcons
         name={`${iconName ? iconName : 'disabled-by-default'}`}
         size={24}
         color={focus ? colors.label : colors.section} />
       <Text style={{...styles.label, color: focus ? colors.label : colors.section}}>{label}</Text>
-    </View>
+    </TouchableOpacity>
   )
 }
 

@@ -4,12 +4,17 @@ import BottomNavigationLayout from "./components/Navigation/BottomNavigationLayo
 import {colors} from "./styles/globalStyles";
 
 export default function App() {
-  const [page, currPage] = useState(0);
+  const [page, setPage] = useState(0);
+
+  const onChangePage = useCallback((id) => {
+    setPage(id);
+  }, []);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>테스트 하고 싶은 앱을 {"\n"}선택해주세요.</Text>
       <View style={{ flex: 9, backgroundColor: colors.label }} />
-      <BottomNavigationLayout page={page} />
+      <BottomNavigationLayout page={page} callback={onChangePage} />
     </View>
   )
 }
