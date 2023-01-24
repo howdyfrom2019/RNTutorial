@@ -2,6 +2,7 @@ import {ScrollView, StyleSheet, Text, View, Button} from 'react-native';
 import {useCallback, useEffect, useState} from "react";
 import BottomNavigationLayout from "./components/Navigation/BottomNavigationLayout";
 import {colors} from "./styles/globalStyles";
+import Weather from "./apps/Weather";
 
 export default function App() {
   const [page, setPage] = useState(0);
@@ -13,7 +14,9 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>테스트 하고 싶은 앱을 {"\n"}선택해주세요.</Text>
-      <View style={{ flex: 9, backgroundColor: colors.label }} />
+      <View style={{ flex: 9, backgroundColor: colors.label }}>
+        <Weather />
+      </View>
       <BottomNavigationLayout page={page} callback={onChangePage} />
     </View>
   )

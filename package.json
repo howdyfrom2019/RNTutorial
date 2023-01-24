@@ -6,7 +6,8 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "postinstall": "rndebugger-open"
   },
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
@@ -17,7 +18,9 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
-    "expo-location": "^15.0.1"
+    "expo-location": "^15.0.1",
+    "react-native-debugger-open": "^0.3.25",
+    "react-native-dotenv": "^3.4.7"
   },
   "private": true
 }
