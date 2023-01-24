@@ -23,6 +23,8 @@ export const height = (
   Dimensions.get('screen').height * (1 / basicDemensions.height).toFixed(2)
 )
 
+export const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = Dimensions.get('window');
+
 export const width = (
   Dimensions.get('screen').width * (1 / basicDemensions.width).toFixed(2)
 )
