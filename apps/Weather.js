@@ -3,7 +3,7 @@ import {colors} from "../styles/globalStyles";
 import * as Location from "expo-location";
 import {StatusBar} from "expo-status-bar";
 import {useCallback, useEffect, useMemo, useState} from "react";
-import {makeTimeStampToCustomDate} from "../utils/commonUtils";
+import {extractHour, makeTimeStampToCustomDate} from "../utils/commonUtils";
 import useWeather from "../hooks/useWeather";
 
 const Weather = () => {
@@ -59,12 +59,16 @@ const Weather = () => {
         {
           isEveryAPICalled() && (
             <ScrollView style={styles.todaysWeatherContainer} horizontal showsHorizontalScrollIndicator={false}>
-              <View style={styles.weatherItem}>
-                <Text style={{ color: colors.white, fontSize: 10 }}>{weather.forecast[0].hour[0].date.slice(23)}</Text>
-                <Image source={{ uri: weather.forecast[0].hour[0].icon }} style={{ width: 32, height: 32 }} />
-                <Text style={{ color: colors.white, fontWeight: '200', fontSize: 12 }}>{weather.forecast[0].hour[0].temperature}℃</Text>
-                <Text style={{ color: colors.white, fontWeight: '100', fontSize: 10 }}>{'\n'}{weather.forecast[0].hour[0].humidity}%</Text>
-              </View>
+              {
+                weather.forecast[0].hour.map((weatherToday, i) => (
+                  <View style={styles.weatherItem} key={`weather_${i}`}>
+                    <Text style={{ color: colors.white, fontSize: 10 }}>{extractHour(weatherToday.date)}</Text>
+                    <Image source={{ uri: weatherToday.icon }} style={{ width: 32, height: 32 }} />
+                    <Text style={{ color: colors.white, fontWeight: '200', fontSize: 12 }}>{weatherToday.temperature}℃</Text>
+                    <Text style={{ color: colors.white, fontWeight: '100', fontSize: 10 }}>{'\n'}{weatherToday.humidity}%</Text>
+                  </View>
+                ))
+              }
             </ScrollView>
           )
         }
@@ -93,13 +97,14 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: colors.whiteAlpha,
     borderColor: colors.white,
-    padding: 20
   },
   weatherItem: {
     width: 64,
     flex: 1,
     justifyContent: 'space-around',
     alignItems: 'center',
+    marginHorizontal: 4,
+    marginVertical: 12,
   }
 });
 
