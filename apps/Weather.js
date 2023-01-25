@@ -21,8 +21,8 @@ const Weather = () => {
 
     const { coords: { longitude, latitude } } = await Location.getCurrentPositionAsync({ accuracy: 5 });
     const [{ city: currCity }] = await Location.reverseGeocodeAsync({ latitude, longitude }, { useGoogleMaps: false });
-    setCity(currCity);
     setSite({ lat: latitude, lon: longitude });
+    setCity(currCity);
   }, []);
 
   const getWeatherForecastDuringWeek = useCallback(async() => {
@@ -37,9 +37,13 @@ const Weather = () => {
 
   useEffect(() => {
     // if (site.lat > 0 && !isEveryAPICalled()) {
-      getPermissions().then(() => getWeatherForecastDuringWeek());
+      getPermissions();
     // }
   }, []);
+
+  useEffect(() => {
+    getWeatherForecastDuringWeek();
+  }, [city]);
 
   return (
     <View style={{ flex: 1 }}>
@@ -55,24 +59,50 @@ const Weather = () => {
           <ActivityIndicator size={'large'} color={'white'} />
         )}
       </View>
-      <ScrollView style={styles.main}>
+      <View style={styles.main}>
         {
           isEveryAPICalled() && (
-            <ScrollView style={styles.todaysWeatherContainer} horizontal showsHorizontalScrollIndicator={false}>
-              {
-                weather.forecast[0].hour.map((weatherToday, i) => (
-                  <View style={styles.weatherItem} key={`weather_${i}`}>
-                    <Text style={{ color: colors.white, fontSize: 10 }}>{extractHour(weatherToday.date)}</Text>
-                    <Image source={{ uri: weatherToday.icon }} style={{ width: 32, height: 32 }} />
-                    <Text style={{ color: colors.white, fontWeight: '200', fontSize: 12 }}>{weatherToday.temperature}℃</Text>
-                    <Text style={{ color: colors.white, fontWeight: '100', fontSize: 10 }}>{'\n'}{weatherToday.humidity}%</Text>
-                  </View>
-                ))
-              }
+            <ScrollView>
+              <ScrollView style={styles.todaysWeatherContainer} horizontal showsHorizontalScrollIndicator={false}>
+                {
+                  weather.forecast[0].hour.map((weatherToday, i) => (
+                    <View style={styles.weatherItem} key={`weather_${i}`}>
+                      <Text style={{ color: colors.white, fontSize: 10 }}>{extractHour(weatherToday.date)}</Text>
+                      <Image source={{ uri: weatherToday.icon }} style={{ width: 32, height: 32 }} />
+                      <Text style={{ color: colors.white, fontWeight: '200', fontSize: 12 }}>{weatherToday.temperature}℃</Text>
+                      <Text style={{ color: colors.white, fontWeight: '100', fontSize: 10 }}>{'\n'}{weatherToday.humidity}%</Text>
+                    </View>
+                  ))
+                }
+              </ScrollView>
+              <View style={styles.etcWeatherContainer}>
+                <View style={styles.etcItem}>
+                  <Text style={{ fontSize: 16, color: colors.white, fontWeight: '200' }}>일출</Text>
+                  <Text style={{ fontSize: 20, color: colors.white, fontWeight: '400' }}>{weather.forecast[0].sunrise}</Text>
+                </View>
+                <View style={styles.etcItem}>
+                  <Text style={{ fontSize: 16, color: colors.white, fontWeight: '200' }}>일몰</Text>
+                  <Text style={{ fontSize: 20, color: colors.white, fontWeight: '400' }}>{weather.forecast[0].sunset}</Text>
+                </View>
+              </View>
+              <View style={styles.etcWeatherContainer}>
+                <View style={styles.etcItem}>
+                  <Text style={{ fontSize: 16, color: colors.white, fontWeight: '200' }}>자외선지수</Text>
+                  <Text style={{ fontSize: 12, color: colors.white, fontWeight: '400' }}>{weather.current.uv}</Text>
+                </View>
+                <View style={styles.etcItem}>
+                  <Text style={{ fontSize: 16, color: colors.white, fontWeight: '200' }}>습도</Text>
+                  <Text style={{ fontSize: 20, color: colors.white, fontWeight: '400' }}>{weather.current.humidity}%</Text>
+                </View>
+                <View style={styles.etcItem}>
+                  <Text style={{ fontSize: 16, color: colors.white, fontWeight: '200' }}>습도</Text>
+                  <Text style={{ fontSize: 20, color: colors.white, fontWeight: '400' }}>{weather.current.humidity}%</Text>
+                </View>
+              </View>
             </ScrollView>
           )
         }
-      </ScrollView>
+      </View>
     </View>
   );
 }
@@ -90,6 +120,7 @@ const styles = StyleSheet.create({
   },
   main: {
     flex: 4,
+    paddingHorizontal: 8,
   },
   todaysWeatherContainer: {
     flexDirection: 'row',
@@ -105,6 +136,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginHorizontal: 4,
     marginVertical: 12,
+  },
+  etcWeatherContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 4,
+    backgroundColor: colors.whiteAlpha,
+    borderColor: colors.white,
+    borderRadius: 20,
+  },
+  etcItem: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-around'
   }
 });
 
