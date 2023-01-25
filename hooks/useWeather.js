@@ -14,7 +14,7 @@ const useWeather = (current, weather) => {
         current: {
           temperature: temp_c,
           condition: text,
-          icon: icon,
+          icon: `https:${icon}`,
           feelingTemperature: feelslike_c,
           humidity,
           uv,
@@ -39,7 +39,7 @@ const useWeather = (current, weather) => {
         return {
           temperature: temp_c,
           condition: text,
-          icon: icon,
+          icon: `https:${icon}`,
           humidity,
           date: makeKoreanDateStyle(hourTime)
         }
@@ -53,7 +53,7 @@ const useWeather = (current, weather) => {
             humidity: avghumidity,
             temperature: avgtemp_c,
             condition: dayText,
-            icon: dayIcon,
+            icon: `https:${dayIcon}`,
           },
           hour: filteredHour
         }
