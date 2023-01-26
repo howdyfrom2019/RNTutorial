@@ -26,9 +26,13 @@ const Weather = () => {
   }, []);
 
   const getWeatherForecastDuringWeek = useCallback(async() => {
-    const data = await fetch(weatherAPIURI);
-    const { current, forecast } = await data.json();
-    setWeatherInfo({ current, forecast });
+    try {
+      const data = await fetch(weatherAPIURI);
+      const { current, forecast } = await data.json();
+      setWeatherInfo({ current, forecast });
+    } catch (e) {
+      console.log(e);
+    }
   }, []);
 
   const isEveryAPICalled = useCallback(() => {
@@ -48,11 +52,11 @@ const Weather = () => {
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.header}>
-        <Text style={{ fontSize: 24, fontWeight: `200`, color: 'white' }}>{city}</Text>
+        <Text style={{ fontSize: 24, fontWeight: `200` }}>{city}</Text>
         {isEveryAPICalled() ? (
           <View style={styles.avgWeather}>
-            <Text style={{ fontSize: 30, fontWeight: '100', color: colors.white }}>{weather.current.temperature}℃</Text>
-            <Text style={{ fontSize: 16, fontWeight: '200', color: colors.white }}>체감온도: {weather.current.feelingTemperature}℃</Text>
+            <Text style={{ fontSize: 30, fontWeight: '100', color: colors.label }}>{weather.current.temperature}℃</Text>
+            <Text style={{ fontSize: 16, fontWeight: '200', color: colors.label }}>체감온도: {weather.current.feelingTemperature}℃</Text>
             <Image source={{ uri: weather.current.icon }} style={{ width: 74, height: 74 }} />
           </View>
         ) : (
@@ -67,36 +71,36 @@ const Weather = () => {
                 {
                   weather.forecast[0].hour.map((weatherToday, i) => (
                     <View style={styles.weatherItem} key={`weather_${i}`}>
-                      <Text style={{ color: colors.white, fontSize: 10 }}>{extractHour(weatherToday.date)}</Text>
+                      <Text style={{ color: colors.label, fontSize: 10 }}>{extractHour(weatherToday.date)}</Text>
                       <Image source={{ uri: weatherToday.icon }} style={{ width: 32, height: 32 }} />
-                      <Text style={{ color: colors.white, fontWeight: '200', fontSize: 12 }}>{weatherToday.temperature}℃</Text>
-                      <Text style={{ color: colors.white, fontWeight: '100', fontSize: 10 }}>{'\n'}{weatherToday.humidity}%</Text>
+                      <Text style={{ color: colors.label, fontWeight: '200', fontSize: 12 }}>{weatherToday.temperature}℃</Text>
+                      <Text style={{ color: colors.label, fontWeight: '100', fontSize: 10 }}>{'\n'}{weatherToday.humidity}%</Text>
                     </View>
                   ))
                 }
               </ScrollView>
               <View style={styles.etcWeatherContainer}>
                 <View style={styles.etcItem}>
-                  <Text style={{ fontSize: 16, color: colors.white, fontWeight: '200' }}>일출</Text>
-                  <Text style={{ fontSize: 20, color: colors.white, fontWeight: '400' }}>{weather.forecast[0].sunrise}</Text>
+                  <Text style={{ fontSize: 16, color: colors.label, fontWeight: '200' }}>일출</Text>
+                  <Text style={{ fontSize: 20, color: colors.label, fontWeight: '400' }}>{weather.forecast[0].sunrise}</Text>
                 </View>
                 <View style={styles.etcItem}>
-                  <Text style={{ fontSize: 16, color: colors.white, fontWeight: '200' }}>일몰</Text>
-                  <Text style={{ fontSize: 20, color: colors.white, fontWeight: '400' }}>{weather.forecast[0].sunset}</Text>
+                  <Text style={{ fontSize: 16, color: colors.label, fontWeight: '200' }}>일몰</Text>
+                  <Text style={{ fontSize: 20, color: colors.label, fontWeight: '400' }}>{weather.forecast[0].sunset}</Text>
                 </View>
               </View>
               <View style={styles.etcWeatherContainer}>
                 <View style={styles.etcItem}>
-                  <Text style={{ fontSize: 16, color: colors.white, fontWeight: '200' }}>자외선지수</Text>
-                  <Text style={{ fontSize: 12, color: colors.white, fontWeight: '400' }}>{weather.current.uv}</Text>
+                  <Text style={{ fontSize: 16, color: colors.label, fontWeight: '200' }}>자외선지수</Text>
+                  <Text style={{ fontSize: 12, color: colors.label, fontWeight: '400' }}>{weather.current.uv}</Text>
                 </View>
                 <View style={styles.etcItem}>
-                  <Text style={{ fontSize: 16, color: colors.white, fontWeight: '200' }}>습도</Text>
-                  <Text style={{ fontSize: 20, color: colors.white, fontWeight: '400' }}>{weather.current.humidity}%</Text>
+                  <Text style={{ fontSize: 16, color: colors.label, fontWeight: '200' }}>습도</Text>
+                  <Text style={{ fontSize: 20, color: colors.label, fontWeight: '400' }}>{weather.current.humidity}%</Text>
                 </View>
                 <View style={styles.etcItem}>
-                  <Text style={{ fontSize: 16, color: colors.white, fontWeight: '200' }}>습도</Text>
-                  <Text style={{ fontSize: 20, color: colors.white, fontWeight: '400' }}>{weather.current.humidity}%</Text>
+                  <Text style={{ fontSize: 16, color: colors.label, fontWeight: '200' }}>습도</Text>
+                  <Text style={{ fontSize: 20, color: colors.label, fontWeight: '400' }}>{weather.current.humidity}%</Text>
                 </View>
               </View>
             </ScrollView>

@@ -16,7 +16,7 @@ const Icon = ({ data, focus, callback }) => {
         name={`${iconName ? iconName : 'disabled-by-default'}`}
         size={24}
         color={focus ? colors.label : colors.section} />
-      <Text style={{...styles.label, color: focus ? colors.label : colors.section}}>{label}</Text>
+      {label && <Text style={{...styles.label, color: focus ? colors.label : colors.section}}>{label}</Text>}
     </TouchableOpacity>
   )
 }
