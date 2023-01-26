@@ -33,7 +33,7 @@ const Weather = () => {
     } catch (e) {
       console.log(e);
     }
-  }, []);
+  }, [site]);
 
   const isEveryAPICalled = useCallback(() => {
     return ok && weather && weather.current && weather.forecast;
